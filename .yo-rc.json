@@ -1,0 +1,37 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "app"
+    },
+    "jhipsterVersion": "5.3.4",
+    "applicationType": "monolith",
+    "baseName": "app",
+    "packageName": "app",
+    "packageFolder": "app",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "ODI2NWE4NTk2NmI2MDQ0MjgxZjhlMjkxNjI3YjUxNmNkZTJmM2ExMjk5ZWY0YTFiOTgyOGU2NTllYmRmMGM1M2I2MzM2ZTUxMmUxMTk3ODMyNWFhZDI2ODJmYjQ3YjNlNWE4NjhhMjkxZWM2ODE3NGUxYjQ0YTE1NWNlYjcxZDE=",
+    "clientFramework": "react",
+    "useSass": false,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-social-login-api",
+        "version": "0.0.1"
+      }
+    ],
+    "enableTranslation": false
+  }
+}
