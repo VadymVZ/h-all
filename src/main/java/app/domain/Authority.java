@@ -18,7 +18,7 @@ public class Authority implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotNull
-    @Size(max = 50)
+    @Size(min = 0, max = 50)
     @Id
     @Column(length = 50)
     private String name;
@@ -42,7 +42,11 @@ public class Authority implements Serializable {
 
         Authority authority = (Authority) o;
 
-        return !(name != null ? !name.equals(authority.name) : authority.name != null);
+        if (name != null ? !name.equals(authority.name) : authority.name != null) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

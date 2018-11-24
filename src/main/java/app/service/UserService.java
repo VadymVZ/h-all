@@ -4,6 +4,7 @@ import app.config.Constants;
 import app.domain.Authority;
 import app.domain.User;
 import app.repository.AuthorityRepository;
+import app.repository.PersistentTokenRepository;
 import app.repository.UserRepository;
 import app.security.AuthoritiesConstants;
 import app.security.SecurityUtils;
@@ -20,7 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,6 +42,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+
+    @Inject
+    private PersistentTokenRepository persistentTokenRepository;
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
         this.userRepository = userRepository;
@@ -261,6 +267,25 @@ public class UserService {
                 log.debug("Deleting not activated user {}", user.getLogin());
                 userRepository.delete(user);
             });
+    }
+
+
+    /**
+     * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
+     * 30 days.
+     * <p>
+     * This is scheduled to get fired everyday, at midnight.
+     * </p>
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void removeOldPersistentTokens() {
+        LocalDate now = LocalDate.now();
+        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).forEach(token -> {
+            log.debug("Deleting token {}", token.getSeries());
+            User user = token.getUser();
+            user.getPersistentTokens().remove(token);
+            persistentTokenRepository.delete(token);
+        });
     }
 
     /**

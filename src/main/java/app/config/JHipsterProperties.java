@@ -1,0 +1,564 @@
+package app.config;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
+
+import javax.validation.constraints.NotNull;
+
+/**
+ * Properties specific to JHipster.
+ *
+ * <p>
+ *     Properties are configured in the application.yml file.
+ * </p>
+ */
+@Component
+@ConfigurationProperties(prefix = "jhipster", ignoreUnknownFields = false)
+public class JHipsterProperties {
+
+    private final Async async = new Async();
+
+    private final Http http = new Http();
+
+    private final Cache cache = new Cache();
+
+    private final Mail mail = new Mail();
+
+    private final Security security = new Security();
+
+    private final Swagger swagger = new Swagger();
+
+    private final Metrics metrics = new Metrics();
+
+    private final CorsConfiguration cors = new CorsConfiguration();
+
+    private final Social social = new Social();
+
+    private final Ribbon ribbon = new Ribbon();
+
+    public Async getAsync() {
+        return async;
+    }
+
+    public Http getHttp() {
+        return http;
+    }
+
+    public Cache getCache() {
+        return cache;
+    }
+
+    public Mail getMail() {
+        return mail;
+    }
+
+    public Security getSecurity() {
+        return security;
+    }
+
+    public Swagger getSwagger() {
+        return swagger;
+    }
+
+    public Metrics getMetrics() {
+        return metrics;
+    }
+
+    public CorsConfiguration getCors() {
+        return cors;
+    }
+
+    public Social getSocial() {
+        return social;
+    }
+
+    public Ribbon getRibbon() {
+        return ribbon;
+    }
+
+    public static class Async {
+
+        private int corePoolSize = 2;
+
+        private int maxPoolSize = 50;
+
+        private int queueCapacity = 10000;
+
+        public int getCorePoolSize() {
+            return corePoolSize;
+        }
+
+        public void setCorePoolSize(int corePoolSize) {
+            this.corePoolSize = corePoolSize;
+        }
+
+        public int getMaxPoolSize() {
+            return maxPoolSize;
+        }
+
+        public void setMaxPoolSize(int maxPoolSize) {
+            this.maxPoolSize = maxPoolSize;
+        }
+
+        public int getQueueCapacity() {
+            return queueCapacity;
+        }
+
+        public void setQueueCapacity(int queueCapacity) {
+            this.queueCapacity = queueCapacity;
+        }
+    }
+
+    public static class Http {
+
+        public JHipsterProperties.Http.Version version;
+        private final Cache cache = new Cache();
+
+      /*  public Http() {
+            this.version = io.github.jhipster.config.JHipsterDefaults.Http.version;
+        }*/
+
+        public JHipsterProperties.Http.Version getVersion() {
+            return this.version;
+        }
+
+        public void setVersion(JHipsterProperties.Http.Version version) {
+            this.version = version;
+        }
+
+
+        public Cache getCache() {
+            return cache;
+        }
+
+        public static class Cache {
+
+            private int timeToLiveInDays = 1461;
+
+            public int getTimeToLiveInDays() {
+                return timeToLiveInDays;
+            }
+
+            public void setTimeToLiveInDays(int timeToLiveInDays) {
+                this.timeToLiveInDays = timeToLiveInDays;
+            }
+        }
+
+        public static enum Version {
+            V_1_1,
+            V_2_0;
+
+            private Version() {
+            }
+        }
+    }
+
+    public static class Cache {
+    }
+
+    public static class Mail {
+
+        private String from = "srvc@localhost";
+
+        private String baseUrl = "";
+
+        public String getFrom() {
+            return from;
+        }
+
+        public void setFrom(String from) {
+            this.from = from;
+        }
+
+        public String getBaseUrl() {
+            return baseUrl;
+        }
+
+        public void setBaseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
+        }
+    }
+
+    public static class Security {
+
+        private final RememberMe rememberMe = new RememberMe();
+
+        private final Authentication authentication = new Authentication();
+
+        public RememberMe getRememberMe() {
+            return rememberMe;
+        }
+
+        public Authentication getAuthentication() {
+            return authentication;
+        }
+
+        public static class Authentication {
+            private final JHipsterProperties.Security.Authentication.Jwt jwt = new JHipsterProperties.Security.Authentication.Jwt();
+
+            public Authentication() {
+            }
+
+            public JHipsterProperties.Security.Authentication.Jwt getJwt() {
+                return this.jwt;
+            }
+
+            public static class Jwt {
+                private String secret;
+                private String base64Secret;
+                private long tokenValidityInSeconds;
+                private long tokenValidityInSecondsForRememberMe;
+
+                public Jwt() {
+                    this.secret = null;
+                    this.base64Secret = null;
+                    this.tokenValidityInSeconds = 1800L;
+                    this.tokenValidityInSecondsForRememberMe = 2592000L;
+                }
+
+                public String getSecret() {
+                    return this.secret;
+                }
+
+                public void setSecret(String secret) {
+                    this.secret = secret;
+                }
+
+                public String getBase64Secret() {
+                    return this.base64Secret;
+                }
+
+                public void setBase64Secret(String base64Secret) {
+                    this.base64Secret = base64Secret;
+                }
+
+                public long getTokenValidityInSeconds() {
+                    return this.tokenValidityInSeconds;
+                }
+
+                public void setTokenValidityInSeconds(long tokenValidityInSeconds) {
+                    this.tokenValidityInSeconds = tokenValidityInSeconds;
+                }
+
+                public long getTokenValidityInSecondsForRememberMe() {
+                    return this.tokenValidityInSecondsForRememberMe;
+                }
+
+                public void setTokenValidityInSecondsForRememberMe(long tokenValidityInSecondsForRememberMe) {
+                    this.tokenValidityInSecondsForRememberMe = tokenValidityInSecondsForRememberMe;
+                }
+            }
+        }
+
+        public static class RememberMe {
+
+            @NotNull
+            private String key;
+
+            public String getKey() {
+                return key;
+            }
+
+            public void setKey(String key) {
+                this.key = key;
+            }
+        }
+    }
+
+    public static class Swagger {
+
+        private String title = "srvc API";
+
+        private String description = "srvc API documentation";
+
+        private String version = "0.0.1";
+
+        private String termsOfServiceUrl;
+
+        private String contactName;
+
+        private String contactUrl;
+
+        private String contactEmail;
+
+        private String license;
+
+        private String licenseUrl;
+
+        private String defaultIncludePattern = "/api/.*";
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public String getTermsOfServiceUrl() {
+            return termsOfServiceUrl;
+        }
+
+        public void setTermsOfServiceUrl(String termsOfServiceUrl) {
+            this.termsOfServiceUrl = termsOfServiceUrl;
+        }
+
+        public String getContactName() {
+            return contactName;
+        }
+
+        public void setContactName(String contactName) {
+            this.contactName = contactName;
+        }
+
+        public String getContactUrl() {
+            return contactUrl;
+        }
+
+        public void setContactUrl(String contactUrl) {
+            this.contactUrl = contactUrl;
+        }
+
+        public String getContactEmail() {
+            return contactEmail;
+        }
+
+        public void setContactEmail(String contactEmail) {
+            this.contactEmail = contactEmail;
+        }
+
+        public String getLicense() {
+            return license;
+        }
+
+        public void setLicense(String license) {
+            this.license = license;
+        }
+
+        public String getLicenseUrl() {
+            return licenseUrl;
+        }
+
+        public void setLicenseUrl(String licenseUrl) {
+            this.licenseUrl = licenseUrl;
+        }
+
+        public String getDefaultIncludePattern() {
+            return this.defaultIncludePattern;
+        }
+
+        public void setDefaultIncludePattern(String defaultIncludePattern) {
+            this.defaultIncludePattern = defaultIncludePattern;
+        }
+    }
+
+    public static class Metrics {
+
+        private final Jmx jmx = new Jmx();
+
+        private final Graphite graphite = new Graphite();
+
+        private final Prometheus prometheus = new Prometheus();
+
+        private final Logs logs = new Logs();
+
+        public Jmx getJmx() {
+            return jmx;
+        }
+
+        public Graphite getGraphite() {
+            return graphite;
+        }
+
+        public Prometheus getPrometheus() {
+            return prometheus;
+        }
+
+        public Logs getLogs() {
+            return logs;
+        }
+
+        public static class Jmx {
+
+            private boolean enabled = true;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
+
+        public static class Graphite {
+
+            private boolean enabled = false;
+
+            private String host = "localhost";
+
+            private int port = 2003;
+
+            private String prefix = "srvc";
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getHost() {
+                return host;
+            }
+
+            public void setHost(String host) {
+                this.host = host;
+            }
+
+            public int getPort() {
+                return port;
+            }
+
+            public void setPort(int port) {
+                this.port = port;
+            }
+
+            public String getPrefix() {
+                return prefix;
+            }
+
+            public void setPrefix(String prefix) {
+                this.prefix = prefix;
+            }
+        }
+
+        public static class Prometheus {
+
+            private boolean enabled = false;
+
+            private String endpoint = "/prometheusMetrics";
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public String getEndpoint() {
+                return endpoint;
+            }
+
+            public void setEndpoint(String endpoint) {
+                this.endpoint = endpoint;
+            }
+        }
+
+        public static class Logs {
+
+            private boolean enabled = false;
+
+            private long reportFrequency = 60;
+
+            public long getReportFrequency() {
+                return reportFrequency;
+            }
+
+            public void setReportFrequency(int reportFrequency) {
+                this.reportFrequency = reportFrequency;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
+    }
+
+    private final Logging logging = new Logging();
+
+    public Logging getLogging() { return logging; }
+
+    public static class Logging {
+
+        private final Logstash logstash = new Logstash();
+
+        public Logstash getLogstash() { return logstash; }
+
+        public static class Logstash {
+
+            private boolean enabled = false;
+
+            private String host = "localhost";
+
+            private int port = 5000;
+
+            private int queueSize = 512;
+
+            public boolean isEnabled() { return enabled; }
+
+            public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
+            public String getHost() { return host; }
+
+            public void setHost(String host) { this.host = host; }
+
+            public int getPort() { return port; }
+
+            public void setPort(int port) { this.port = port; }
+
+            public int getQueueSize() { return queueSize; }
+
+            public void setQueueSize(int queueSize) { this.queueSize = queueSize; }
+        }
+    }
+
+    public static class Social {
+
+        private String redirectAfterSignIn = "/#/home";
+
+        public String getRedirectAfterSignIn() {
+            return redirectAfterSignIn;
+        }
+
+        public void setRedirectAfterSignIn(String redirectAfterSignIn) {
+            this.redirectAfterSignIn = redirectAfterSignIn;
+        }
+    }
+
+    public static class Ribbon {
+
+        private String[] displayOnActiveProfiles;
+
+        public String[] getDisplayOnActiveProfiles() {
+            return displayOnActiveProfiles;
+        }
+
+        public void setDisplayOnActiveProfiles(String[] displayOnActiveProfiles) {
+            this.displayOnActiveProfiles = displayOnActiveProfiles;
+        }
+    }
+}
