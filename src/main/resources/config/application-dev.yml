@@ -37,7 +37,7 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/app?useUnicode=true&characterEncoding=utf8&useSSL=false
         username: root
-        password:
+        password: root
         hikari:
             auto-commit: false
             data-source-properties:
@@ -68,7 +68,7 @@ spring:
         cache: false
 
 server:
-    port: 8080
+    port: 7070
 
 # ===================================================================
 # JHipster specific properties
@@ -97,7 +97,7 @@ jhipster:
                 token-validity-in-seconds-for-remember-me: 2592000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: app@localhost
-        base-url: http://127.0.0.1:8080
+        base-url: http://127.0.0.1:7070
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx:
             enabled: true
