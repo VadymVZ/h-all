@@ -121,7 +121,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
             .and()
                 .formLogin()
-                .loginProcessingUrl("/api/authentication-check")
+                .loginProcessingUrl("/api/authentication")
                 .successHandler(ajaxAuthenticationSuccessHandler)
                 .failureHandler(ajaxAuthenticationFailureHandler)
                 .usernameParameter("j_username")
