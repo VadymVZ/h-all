@@ -99,7 +99,7 @@ export const displayAuthError = message => ({ type: ACTION_TYPES.ERROR_MESSAGE, 
 export const getSession = () => dispatch =>
   dispatch({
     type: ACTION_TYPES.GET_SESSION,
-    payload: axios.get('api/account')
+    payload: axios.get('api/account')/*comment out to not get 401 notifications*/
   });
 
 export const login = (username, password, rememberMe = false) => async (dispatch, getState) => {
