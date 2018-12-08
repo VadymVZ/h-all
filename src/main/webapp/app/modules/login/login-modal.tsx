@@ -3,7 +3,6 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Alert, Row, Col } from 'reactstrap';
 import { AvForm, AvField, AvGroup, AvInput } from 'availity-reactstrap-validation';
 import { Link } from 'react-router-dom';
-import SocialButton from './social/SocialButton';
 import SocialButtonOldFashioned from './social/SocialButtonOldFashioned';
 
 export interface ILoginModalProps {
@@ -24,7 +23,7 @@ class LoginModal extends React.Component<ILoginModalProps> {
 
     return (
       <Modal isOpen={this.props.showModal} toggle={handleClose} backdrop="static" id="login-page" autoFocus={false}>
-        <SocialButtonOldFashioned social="facebook" label={'Facebook Old Fashioned'} />
+        <SocialButtonOldFashioned social="facebook" label={'Facebook'} />
         <AvForm onSubmit={this.handleSubmit}>
           <ModalHeader id="login-title" toggle={handleClose}>
             Sign in
@@ -37,9 +36,6 @@ class LoginModal extends React.Component<ILoginModalProps> {
                     <strong>Failed to sign in!</strong> Please check your credentials and try again.
                   </Alert>
                 ) : null}
-              </Col>
-              <Col md="12">
-                <SocialButton social="facebook" label={'Facebook'} />
               </Col>
               <Col md="12">
                 <AvField
