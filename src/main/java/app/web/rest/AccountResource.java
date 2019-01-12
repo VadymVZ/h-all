@@ -1,7 +1,9 @@
 package app.web.rest;
 
+import app.domain.Account;
 import app.domain.PersistentToken;
 import app.repository.PersistentTokenRepository;
+import app.service.UserAccountService;
 import com.codahale.metrics.annotation.Timed;
 
 import app.domain.User;
@@ -46,6 +48,10 @@ public class AccountResource {
     private final MailService mailService;
 
     @Inject
+    private UserAccountService userAccountService;
+
+
+    @Inject
     private app.repository.PersistentTokenRepository persistentTokenRepository;
 
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
@@ -71,7 +77,9 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+        //accountService.createUserAccount(user);
+        log.debug("Activated USER " +  managedUserVM.toString());
+        //mailService.sendActivationEmail(user);
     }
 
     /**

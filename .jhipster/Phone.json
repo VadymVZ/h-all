@@ -1,0 +1,18 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "number",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20190108212033",
+    "dto": "no",
+    "searchEngine": false,
+    "service": "serviceImpl",
+    "entityTableName": "phone",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

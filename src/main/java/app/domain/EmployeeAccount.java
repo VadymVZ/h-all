@@ -14,8 +14,8 @@ import java.util.Objects;
 @Table(name = "employee_account")
 public class EmployeeAccount implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -4730622405888271691L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

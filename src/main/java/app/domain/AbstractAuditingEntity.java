@@ -23,7 +23,8 @@ import javax.persistence.MappedSuperclass;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditingEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 757923036162773867L;
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)

@@ -1,13 +1,13 @@
 package app.web.rest;
 
+import app.domain.*;
+import app.repository.SkillRepository;
+import app.service.*;
 import com.codahale.metrics.annotation.Timed;
-import app.domain.EmployeeAccount;
-import app.service.EmployeeAccountService;
 import app.web.rest.errors.BadRequestAlertException;
 import app.web.rest.util.HeaderUtil;
 import app.web.rest.util.PaginationUtil;
 import app.service.dto.EmployeeAccountCriteria;
-import app.service.EmployeeAccountQueryService;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * REST controller for managing EmployeeAccount.
@@ -38,11 +38,26 @@ public class EmployeeAccountResource {
 
     private final EmployeeAccountService employeeAccountService;
 
+    private final UserAccountService accountService;
+    private final SkillService skillService;
+    private final SkillLevelService skillLevelService;
+    private final UserService userService;
+
     private final EmployeeAccountQueryService employeeAccountQueryService;
 
-    public EmployeeAccountResource(EmployeeAccountService employeeAccountService, EmployeeAccountQueryService employeeAccountQueryService) {
+    @Inject
+    private SkillRepository skillRepository;
+
+
+    public EmployeeAccountResource(EmployeeAccountService employeeAccountService, EmployeeAccountQueryService employeeAccountQueryService,
+                                   UserAccountService accountService, SkillService skillService, SkillLevelService skillLevelService,
+                                   UserService userService) {
         this.employeeAccountService = employeeAccountService;
+        this.accountService = accountService;
+        this.skillService = skillService;
+        this.skillLevelService = skillLevelService;
         this.employeeAccountQueryService = employeeAccountQueryService;
+        this.userService = userService;
     }
 
     /**
@@ -99,6 +114,49 @@ public class EmployeeAccountResource {
     public ResponseEntity<List<EmployeeAccount>> getAllEmployeeAccounts(EmployeeAccountCriteria criteria, Pageable pageable) {
         log.debug("REST request to get EmployeeAccounts by criteria: {}", criteria);
         Page<EmployeeAccount> page = employeeAccountQueryService.findByCriteria(criteria, pageable);
+
+        /*Set<Authority> authorities = new HashSet<>(1);
+        authorities.add(authorityRepository.findOneByName(AuthoritiesConstants.USER));*/
+        //Session session = HibernateUtil.getSessionFactory().openSession();
+        //session.beginTransaction();
+
+
+        /*Skill skill = new Skill();
+        skill.setName("java");
+
+        SkillLevel skillLevel = new SkillLevel();
+        skillLevel.setName("medium");
+        skillLevelService.save(skillLevel);
+
+        Account account = new Account();
+        account.setReceiveMailing(true);
+        account.setRecruiter(true);
+        account.setActivated(true);
+
+        accountService.save(account);
+
+        AccountSkill accountSkill = new AccountSkill();
+        accountSkill.setAccount(account);
+        accountSkill.setSkill(skill);
+        accountSkill.setSkillLevel(skillLevel);
+
+        //account.getSkillAccounts().add(skillAccount);
+        skill.getAccountSkills().add(accountSkill);
+        skillService.save(skill);*/
+
+        /*Account account = new Account();
+        account.setActivated(true);
+        account.setReceiveMailing(true);
+        account.setRecruiter(false);
+
+        User user = userService.getUserWithAuthorities(5L).orElse(null);
+
+        Set<User> users = new HashSet<>();
+        users.add(user);
+
+        account.setUsers(users);
+        accountService.save(account);
+*/
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/employee-accounts");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

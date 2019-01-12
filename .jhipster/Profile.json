@@ -1,0 +1,48 @@
+{
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "salaryAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "city",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "experience",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "jobExpectations",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "achievements",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "positionName",
+            "fieldType": "String"
+        },
+
+      {
+        "fieldName": "y",
+        "fieldType": "byte[]",
+        "fieldValidateRules": []
+      }
+    ],
+    "changelogDate": "20190108210628",
+    "dto": "mapstruct",
+    "searchEngine": false,
+    "service": "serviceImpl",
+    "entityTableName": "profile",
+    "jpaMetamodelFiltering": true,
+    "pagination": "pagination"
+}

@@ -19,12 +19,12 @@
 
     <changeSet id="20181105221700-1" author="vz">
 
-        <createTable tableName="jhi_persistent_token">
+        <createTable tableName="persistent_token">
             <!-- Maximum line length of Base64 output is 76 -->
             <column name="series" type="varchar(76)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="bigint"/>
+            <column name="user_id" type="int"/>
             <column name="token_value" type="varchar(76)">
                 <constraints nullable="false" />
             </column>
@@ -34,15 +34,15 @@
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="jhi_persistent_token"
+                                 baseTableName="persistent_token"
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="user"/>
 
 
         <!-- Social -->
-        <createTable tableName="jhi_social_user_connection">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+        <createTable tableName="social_user_connection">
+            <column name="id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_id" type="varchar(255)">
@@ -54,7 +54,7 @@
             <column name="provider_user_id" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="rank" type="bigint">
+            <column name="rank" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="display_name" type="varchar(255)"/>
@@ -68,9 +68,8 @@
             <column name="expire_time" type="bigint"/>
         </createTable>
 
-        <addUniqueConstraint tableName="jhi_social_user_connection" columnNames="user_id, provider_id, provider_user_id"/>
-
-        <addUniqueConstraint tableName="jhi_social_user_connection" columnNames="user_id, provider_id, rank"/>
+        <addUniqueConstraint tableName="social_user_connection" columnNames="user_id, provider_id, provider_user_id"/>
+        <addUniqueConstraint tableName="social_user_connection" columnNames="user_id, provider_id, rank"/>
     </changeSet>
 
 </databaseChangeLog>

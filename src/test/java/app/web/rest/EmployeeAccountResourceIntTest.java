@@ -4,10 +4,9 @@ import app.AppApp;
 
 import app.domain.EmployeeAccount;
 import app.repository.EmployeeAccountRepository;
-import app.service.EmployeeAccountService;
+import app.service.*;
 import app.web.rest.errors.ExceptionTranslator;
 import app.service.dto.EmployeeAccountCriteria;
-import app.service.EmployeeAccountQueryService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -76,10 +75,16 @@ public class EmployeeAccountResourceIntTest {
 
     private EmployeeAccount employeeAccount;
 
+    private UserAccountService accountService;
+    private SkillService skillService;
+    private SkillLevelService skillLevelService;
+    private UserService userService;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EmployeeAccountResource employeeAccountResource = new EmployeeAccountResource(employeeAccountService, employeeAccountQueryService);
+        final EmployeeAccountResource employeeAccountResource = new EmployeeAccountResource(employeeAccountService, employeeAccountQueryService,
+            accountService, skillService, skillLevelService, userService);
         this.restEmployeeAccountMockMvc = MockMvcBuilders.standaloneSetup(employeeAccountResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

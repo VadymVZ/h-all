@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
+    <property name="now" value="GETDATE()" dbms="mssql"/>
+
+    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle,mssql"/>
+
+
+    <changeSet id="20181225234800-1" author="vz">
+
+        <createTable tableName="account">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="is_recruiter" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_activated" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="should_receive_mailing" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="skill">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+
+        <createTable tableName="skill_level">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="account_skill">
+            <column name="account_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="skill_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="skill_level_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="account_skill"
+                                 constraintName="fk_account_skill_account_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="account"/>
+
+        <addForeignKeyConstraint baseColumnNames="skill_id"
+                                 baseTableName="account_skill"
+                                 constraintName="fk_account_skill_skill_skill_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="skill"/>
+
+        <addForeignKeyConstraint baseColumnNames="skill_level_id"
+                                 baseTableName="account_skill"
+                                 constraintName="fk_account_skill_skill_level_skill_level_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="skill_level"/>
+
+        <addPrimaryKey columnNames="account_id, skill_id" tableName="account_skill"/>
+
+
+        <createTable tableName="contact">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="skype" type="varchar(255)"/>
+            <column name="telegram" type="varchar(255)"/>
+            <column name="linkedIn" type="varchar(255)"/>
+            <column name="github" type="varchar(255)"/>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="contact"
+                                 constraintName="fk_contact_account_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="account"/>
+
+        <createTable tableName="cv_file">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="contact_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="cv" type="blob"/>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseColumnNames="contact_id"
+                                 baseTableName="cv_file"
+                                 constraintName="fk_cv_file_contact_contact_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contact"/>
+
+        <createTable tableName="job_category">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="parent_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+
+        <createTable tableName="language">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+
+        <createTable tableName="language_level">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+
+        <createTable tableName="occupation">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+
+
+        <createTable tableName="phone">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="contact_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="number" type="varchar(255)"/>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseColumnNames="contact_id"
+                                 baseTableName="phone"
+                                 constraintName="fk_phone_contact_contact_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contact"/>
+
+        <createTable tableName="photo">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="contact_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="blob"/>
+        </createTable>
+
+
+        <addForeignKeyConstraint baseColumnNames="contact_id"
+                                 baseTableName="photo"
+                                 constraintName="fk_photo_contact_contact_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="contact"/>
+
+
+
+        <createTable tableName="profile">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="salary_amount" type="DOUBLE"/>
+            <column name="city" type="varchar(255)"/>
+            <column name="description" type="TEXT(1000)"/>
+            <column name="experience" type="TINYINT(2)"/>
+            <column name="job_expectations" type="TEXT(1000))"/>
+            <column name="achievements" type="TEXT(1000)"/>
+            <column name="position_name" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="profile"
+                                 constraintName="fk_profile_account_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="account"/>
+
+
+        <createTable tableName="profile_job_category">
+            <column name="profile_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_category_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_main_category" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="profile_id"
+                                 baseTableName="profile_job_category"
+                                 constraintName="fk_profile_job_category_profile_profile_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="profile"/>
+
+        <addForeignKeyConstraint baseColumnNames="job_category_id"
+                                 baseTableName="profile_job_category"
+                                 constraintName="fk_profile_job_category_job_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="job_category"/>
+
+        <addPrimaryKey tableName="profile_job_category" columnNames="profile_id, job_category_id"/>
+
+
+
+        <createTable tableName="profile_occupation">
+            <column name="profile_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="occupation_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="profile_id"
+                                 baseTableName="profile_occupation"
+                                 constraintName="fk_profile_occupation_profile_profile_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="profile"/>
+
+        <addForeignKeyConstraint baseColumnNames="occupation_id"
+                                 baseTableName="profile_occupation"
+                                 constraintName="fk_profile_occupation_occupation_occupation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="occupation"/>
+
+        <addPrimaryKey tableName="profile_occupation" columnNames="profile_id, occupation_id"/>
+
+
+        <createTable tableName="profile_language">
+            <column name="profile_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="language_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="language_level_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="profile_id"
+                                 baseTableName="profile_language"
+                                 constraintName="fk_profile_language_profile_profile_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="profile"/>
+
+        <addForeignKeyConstraint baseColumnNames="language_id"
+                                 baseTableName="profile_language"
+                                 constraintName="fk_profile_language_language_language_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="language"/>
+
+        <addForeignKeyConstraint baseColumnNames="language_level_id"
+                                 baseTableName="profile_language"
+                                 constraintName="fk_profile_language_language_level_language_level_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="language_level"/>
+
+        <addPrimaryKey tableName="profile_language" columnNames="profile_id, language_id"/>
+
+
+
+        <createTable tableName="stop_word">
+            <column name="id" type="int UNSIGNED" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="account_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="key" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="stop_word"
+                                 constraintName="fk_stop_word_account_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="account"/>
+
+
+        <createTable tableName="user_account">
+            <column name="user_id" type="int" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="int UNSIGNED" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="account_id"
+                                 baseTableName="user_account"
+                                 constraintName="fk_user_account_account_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="account"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_account"
+                                 constraintName="fk_user_account_user_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+
+        <addPrimaryKey tableName="user_account" columnNames="user_id, account_id"/>
+
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -7,6 +7,22 @@
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180922172212_added_entity_EmployeeAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20181105221700_added_social_config.xml" relativeToChangelogFile="false"/>
+    <!--<include file="config/liquibase/changelog/20181225234800_added_custom_init_tables.xml" relativeToChangelogFile="false"/>-->
+    <include file="config/liquibase/changelog/20190108204941_added_entity_Skill.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108205351_added_entity_SkillLevel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108210628_added_entity_Profile.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108210953_added_entity_Photo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108211824_added_entity_StopWord.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108212033_added_entity_Phone.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108212123_added_entity_Occupation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108212246_added_entity_LanguageLevel.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108212347_added_entity_Language.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108212513_added_entity_JobCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108212631_added_entity_CvFile.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108214139_added_entity_Contact.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190112213752_added_entity_UserAccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20190108231539_added_custom_tables_and_fk.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

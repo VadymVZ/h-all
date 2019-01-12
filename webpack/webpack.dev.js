@@ -48,6 +48,7 @@ module.exports = (options) => webpackMerge(commonConfig({ env: ENV }), {
         '/signin',
         '/social-register',
         '/social',
+        '/facebook',
       ],
       target: `http${options.tls ? 's' : ''}://localhost:7070`,
       secure: false,

@@ -12,12 +12,12 @@ import java.util.Objects;
  * A Social user.
  */
 @Entity
-@Table(name = "jhi_social_user_connection")
+@Table(name = "social_user_connection")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class SocialUserConnection implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -4987084702832978866L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
