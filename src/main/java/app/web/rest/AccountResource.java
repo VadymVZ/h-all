@@ -1,22 +1,18 @@
 package app.web.rest;
 
-import app.domain.Account;
 import app.domain.PersistentToken;
-import app.repository.PersistentTokenRepository;
-import app.service.UserAccountService;
-import com.codahale.metrics.annotation.Timed;
-
 import app.domain.User;
 import app.repository.UserRepository;
 import app.security.SecurityUtils;
 import app.service.MailService;
+import app.service.UserAccountService;
 import app.service.UserService;
 import app.service.dto.PasswordChangeDTO;
 import app.service.dto.UserDTO;
 import app.web.rest.errors.*;
 import app.web.rest.vm.KeyAndPasswordVM;
 import app.web.rest.vm.ManagedUserVM;
-
+import com.codahale.metrics.annotation.Timed;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -77,7 +74,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        //accountService.createUserAccount(user);
+        userAccountService.createUserAccount(user);
         log.debug("Activated USER " +  managedUserVM.toString());
         //mailService.sendActivationEmail(user);
     }

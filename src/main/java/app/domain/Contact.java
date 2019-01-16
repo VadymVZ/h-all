@@ -44,7 +44,7 @@ public class Contact implements Serializable {
     private String email;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
     private UserAccount account;
 
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "contact")

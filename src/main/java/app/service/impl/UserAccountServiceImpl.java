@@ -1,7 +1,7 @@
 package app.service.impl;
 
+import app.domain.*;
 import app.service.UserAccountService;
-import app.domain.UserAccount;
 import app.repository.UserAccountRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -79,12 +80,27 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public Long map(UserAccount userAccount) {
-        return userAccount.getId();
+    public UserAccount createUserAccount(User user) {
+        UserAccount userAccount = new UserAccount();
+        userAccount.setName(user.getLogin() + " account");
+        userAccount.setActivated(false);
+        userAccount.setRecruiter(false);
+        userAccount.setReceiveMailing(true);
+
+        return userAccountRepository.save(userAccount);
     }
 
-    @Override
-    public UserAccount map(Long id) {
-        return userAccountRepository.findById(id).orElse(null);
+    //TODO remove this test
+    public void addUserAccountSkills(List<Long> ids) {
+
+        UserAccount account = userAccountRepository.findById(1L).orElse(null);
+
+
+        AccountSkill accountSkill1 = new AccountSkill();
+        accountSkill1.setAccount(new UserAccount());
+        accountSkill1.setSkill(new Skill());
+        accountSkill1.setSkillLevel(new SkillLevel());
+        account.getAccountSkills().add(accountSkill1);
+
     }
 }

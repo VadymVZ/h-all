@@ -1,7 +1,7 @@
 package app.service;
 
 import app.domain.Photo;
-
+import app.service.dto.PhotoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -35,7 +35,7 @@ public interface PhotoService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<Photo> findOne(Long id);
+    Optional<PhotoDTO> findOne(Long id);
 
     /**
      * Delete the "id" photo.

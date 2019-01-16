@@ -1,10 +1,12 @@
 package app.service;
 
+import app.domain.User;
 import app.domain.UserAccount;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,7 +46,9 @@ public interface UserAccountService {
      */
     void delete(Long id);
 
-    Long map(UserAccount userAccount);
+    UserAccount createUserAccount(User user);
 
-    UserAccount map(Long id);
+
+    //TODO remove this test
+    void addUserAccountSkills(List<Long> ids);
 }

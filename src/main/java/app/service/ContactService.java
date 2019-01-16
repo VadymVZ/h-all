@@ -1,5 +1,6 @@
 package app.service;
 
+import app.domain.Contact;
 import app.service.dto.ContactDTO;
 
 import org.springframework.data.domain.Page;
@@ -15,10 +16,10 @@ public interface ContactService {
     /**
      * Save a contact.
      *
-     * @param contactDTO the entity to save
+     * @param contact the entity to save
      * @return the persisted entity
      */
-    ContactDTO save(ContactDTO contactDTO);
+    Contact save(Contact contact);
 
     /**
      * Get all the contacts.

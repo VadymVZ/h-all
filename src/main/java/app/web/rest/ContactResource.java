@@ -1,5 +1,7 @@
 package app.web.rest;
 
+import app.domain.Contact;
+import app.service.mapper.ContactMapper;
 import com.codahale.metrics.annotation.Timed;
 import app.service.ContactService;
 import app.web.rest.errors.BadRequestAlertException;
@@ -39,9 +41,12 @@ public class ContactResource {
 
     private final ContactQueryService contactQueryService;
 
-    public ContactResource(ContactService contactService, ContactQueryService contactQueryService) {
+    private final ContactMapper contactMapper;
+
+    public ContactResource(ContactService contactService, ContactQueryService contactQueryService, ContactMapper contactMapper) {
         this.contactService = contactService;
         this.contactQueryService = contactQueryService;
+        this.contactMapper = contactMapper;
     }
 
     /**
@@ -53,13 +58,15 @@ public class ContactResource {
      */
     @PostMapping("/contacts")
     @Timed
-    public ResponseEntity<ContactDTO> createContact(@RequestBody ContactDTO contactDTO) throws URISyntaxException {
+    public ResponseEntity<Contact> createContact(@RequestBody ContactDTO contactDTO) throws URISyntaxException {
         log.debug("REST request to save Contact : {}", contactDTO);
-        if (contactDTO.getId() != null) {
-            throw new BadRequestAlertException("A new contact cannot already have an ID", ENTITY_NAME, "idexists");
+        if (contactDTO.getId() != null || contactDTO.getAccountId() == null) {
+            throw new BadRequestAlertException("A new contact cannot already have an ID and should have an account id", ENTITY_NAME, "idexists");
         }
-        contactDTO.setAccountId(1L);
-        ContactDTO result = contactService.save(contactDTO);
+
+        Contact contact = contactMapper.toEntity(contactDTO);
+        Contact result = contactService.save(contact);
+
         return ResponseEntity.created(new URI("/api/contacts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,12 +83,13 @@ public class ContactResource {
      */
     @PutMapping("/contacts")
     @Timed
-    public ResponseEntity<ContactDTO> updateContact(@RequestBody ContactDTO contactDTO) throws URISyntaxException {
+    public ResponseEntity<Contact> updateContact(@RequestBody ContactDTO contactDTO) throws URISyntaxException {
         log.debug("REST request to update Contact : {}", contactDTO);
-        if (contactDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        if (contactDTO.getId() == null || contactDTO.getAccountId() == null) {
+            throw new BadRequestAlertException("Invalid contact or account id", ENTITY_NAME, "idnull");
         }
-        ContactDTO result = contactService.save(contactDTO);
+        Contact contact = contactMapper.toEntity(contactDTO);
+        Contact result = contactService.save(contact);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, contactDTO.getId().toString()))
             .body(result);

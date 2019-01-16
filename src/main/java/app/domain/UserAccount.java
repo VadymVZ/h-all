@@ -1,6 +1,8 @@
 package app.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -37,8 +39,12 @@ public class UserAccount implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.account")
     private Set<AccountSkill> accountSkills = new HashSet<AccountSkill>(0);
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
     private Profile profile;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    private Contact contact;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(
@@ -46,6 +52,17 @@ public class UserAccount implements Serializable {
         joinColumns = {@JoinColumn(name = "account_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")})
     private Set<User> users = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    private Set<StopWord> stopWords = new HashSet<>();
+
+    public Set<StopWord> getStopWords() {
+        return stopWords;
+    }
+
+    public void setStopWords(Set<StopWord> stopWords) {
+        this.stopWords = stopWords;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -108,6 +125,39 @@ public class UserAccount implements Serializable {
         this.name = name;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+
+    public Set<AccountSkill> getAccountSkills() {
+        return accountSkills;
+    }
+
+    public void setAccountSkills(Set<AccountSkill> accountSkills) {
+        this.accountSkills = accountSkills;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
 
     @Override
     public boolean equals(Object o) {

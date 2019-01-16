@@ -96,7 +96,7 @@ public class ContactResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ContactResource contactResource = new ContactResource(contactService, contactQueryService);
+        final ContactResource contactResource = new ContactResource(contactService, contactQueryService, contactMapper);
         this.restContactMockMvc = MockMvcBuilders.standaloneSetup(contactResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

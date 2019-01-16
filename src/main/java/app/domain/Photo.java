@@ -27,8 +27,8 @@ public class Photo implements Serializable {
     @Column(name = "value_content_type")
     private String valueContentType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contact_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "contact_id", referencedColumnName = "id", nullable = false)
     private Contact contact;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

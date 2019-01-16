@@ -14,11 +14,11 @@ public interface ContactMapper extends EntityMapper<ContactDTO, Contact> {
 
 
     @Override
-    @Mapping(source = "account", target = "accountId")
+    @Mapping(source = "account.id", target = "accountId")
     ContactDTO toDto(Contact entity);
 
     @Override
-    @Mapping(source = "accountId", target = "account")
+    @Mapping(source = "accountId", target = "account.id")
     Contact toEntity(ContactDTO dto);
 
     default Contact fromId(Long id) {

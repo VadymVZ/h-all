@@ -36,15 +36,12 @@ public class ContactServiceImpl implements ContactService {
     /**
      * Save a contact.
      *
-     * @param contactDTO the entity to save
+     * @param contact the entity to save
      * @return the persisted entity
      */
     @Override
-    public ContactDTO save(ContactDTO contactDTO) {
-        log.debug("Request to save Contact : {}", contactDTO);
-        Contact contact = contactMapper.toEntity(contactDTO);
-        contact = contactRepository.save(contact);
-        return contactMapper.toDto(contact);
+    public Contact save(Contact contact) {
+        return contactRepository.save(contact);
     }
 
     /**
