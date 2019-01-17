@@ -2,6 +2,7 @@ package app.service;
 
 import app.domain.StopWord;
 
+import app.service.dto.StopWordDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -35,7 +36,7 @@ public interface StopWordService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<StopWord> findOne(Long id);
+    Optional<StopWordDTO> findOne(Long id);
 
     /**
      * Delete the "id" stopWord.

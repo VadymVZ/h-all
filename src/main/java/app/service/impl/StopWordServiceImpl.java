@@ -3,6 +3,8 @@ package app.service.impl;
 import app.service.StopWordService;
 import app.domain.StopWord;
 import app.repository.StopWordRepository;
+import app.service.dto.StopWordDTO;
+import app.service.mapper.StopWordMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +26,11 @@ public class StopWordServiceImpl implements StopWordService {
 
     private final StopWordRepository stopWordRepository;
 
-    public StopWordServiceImpl(StopWordRepository stopWordRepository) {
+    private final StopWordMapper stopWordMapper;
+
+    public StopWordServiceImpl(StopWordRepository stopWordRepository, StopWordMapper stopWordMapper) {
         this.stopWordRepository = stopWordRepository;
+        this.stopWordMapper = stopWordMapper;
     }
 
     /**
@@ -36,7 +41,8 @@ public class StopWordServiceImpl implements StopWordService {
      */
     @Override
     public StopWord save(StopWord stopWord) {
-        log.debug("Request to save StopWord : {}", stopWord);        return stopWordRepository.save(stopWord);
+        log.debug("Request to save StopWord : {}", stopWord);
+        return stopWordRepository.save(stopWord);
     }
 
     /**
@@ -61,9 +67,9 @@ public class StopWordServiceImpl implements StopWordService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<StopWord> findOne(Long id) {
+    public Optional<StopWordDTO> findOne(Long id) {
         log.debug("Request to get StopWord : {}", id);
-        return stopWordRepository.findById(id);
+        return stopWordRepository.findById(id).map(stopWordMapper::toDto);
     }
 
     /**

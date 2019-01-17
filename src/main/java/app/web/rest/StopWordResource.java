@@ -1,5 +1,7 @@
 package app.web.rest;
 
+import app.service.dto.StopWordDTO;
+import app.service.mapper.StopWordMapper;
 import com.codahale.metrics.annotation.Timed;
 import app.domain.StopWord;
 import app.service.StopWordService;
@@ -39,26 +41,31 @@ public class StopWordResource {
 
     private final StopWordQueryService stopWordQueryService;
 
-    public StopWordResource(StopWordService stopWordService, StopWordQueryService stopWordQueryService) {
+    private final StopWordMapper stopWordMapper;
+
+    public StopWordResource(StopWordService stopWordService, StopWordQueryService stopWordQueryService, StopWordMapper stopWordMapper) {
         this.stopWordService = stopWordService;
         this.stopWordQueryService = stopWordQueryService;
+        this.stopWordMapper = stopWordMapper;
     }
 
     /**
      * POST  /stop-words : Create a new stopWord.
      *
-     * @param stopWord the stopWord to create
+     * @param stopWordDTO the stopWord to create
      * @return the ResponseEntity with status 201 (Created) and with body the new stopWord, or with status 400 (Bad Request) if the stopWord has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/stop-words")
     @Timed
-    public ResponseEntity<StopWord> createStopWord(@RequestBody StopWord stopWord) throws URISyntaxException {
-        log.debug("REST request to save StopWord : {}", stopWord);
-        if (stopWord.getId() != null) {
-            throw new BadRequestAlertException("A new stopWord cannot already have an ID", ENTITY_NAME, "idexists");
+    public ResponseEntity<StopWordDTO> createStopWord(@RequestBody StopWordDTO stopWordDTO) throws URISyntaxException {
+        log.debug("REST request to save StopWord : {}", stopWordDTO);
+        if (stopWordDTO.getId() != null || stopWordDTO.getAccountId() == null) {
+            throw new BadRequestAlertException("A new stopWord cannot already have an ID or does not have linked account", ENTITY_NAME, "idexists");
         }
-        StopWord result = stopWordService.save(stopWord);
+        StopWord stopWord = stopWordMapper.toEntity(stopWordDTO);
+        StopWordDTO result = stopWordMapper.toDto(stopWordService.save(stopWord));
+
         return ResponseEntity.created(new URI("/api/stop-words/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -67,7 +74,7 @@ public class StopWordResource {
     /**
      * PUT  /stop-words : Updates an existing stopWord.
      *
-     * @param stopWord the stopWord to update
+     * @param stopWordDTO the stopWord to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated stopWord,
      * or with status 400 (Bad Request) if the stopWord is not valid,
      * or with status 500 (Internal Server Error) if the stopWord couldn't be updated
@@ -75,14 +82,16 @@ public class StopWordResource {
      */
     @PutMapping("/stop-words")
     @Timed
-    public ResponseEntity<StopWord> updateStopWord(@RequestBody StopWord stopWord) throws URISyntaxException {
-        log.debug("REST request to update StopWord : {}", stopWord);
-        if (stopWord.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    public ResponseEntity<StopWordDTO> updateStopWord(@RequestBody StopWordDTO stopWordDTO) throws URISyntaxException {
+        log.debug("REST request to update StopWord : {}", stopWordDTO);
+        if (stopWordDTO.getId() == null || stopWordDTO.getAccountId() == null) {
+            throw new BadRequestAlertException("Invalid stopWord or account id", ENTITY_NAME, "idnull");
         }
-        StopWord result = stopWordService.save(stopWord);
+        StopWord stopWord = stopWordMapper.toEntity(stopWordDTO);
+        StopWordDTO result = stopWordMapper.toDto(stopWordService.save(stopWord));
+
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, stopWord.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, stopWordDTO.getId().toString()))
             .body(result);
     }
 
@@ -110,10 +119,10 @@ public class StopWordResource {
      */
     @GetMapping("/stop-words/{id}")
     @Timed
-    public ResponseEntity<StopWord> getStopWord(@PathVariable Long id) {
+    public ResponseEntity<StopWordDTO> getStopWord(@PathVariable Long id) {
         log.debug("REST request to get StopWord : {}", id);
-        Optional<StopWord> stopWord = stopWordService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(stopWord);
+        Optional<StopWordDTO> result = stopWordService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(result);
     }
 
     /**
