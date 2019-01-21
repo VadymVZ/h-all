@@ -1,16 +1,16 @@
 package app.web.rest;
 
-import app.domain.*;
-import app.service.UserAccountSkillService;
+import app.domain.AccountSkill;
+import app.domain.UserAccount;
+import app.service.UserAccountService;
 import app.service.dto.AccountSkillDTO;
 import app.service.dto.UserAccountDTO;
 import app.service.mapper.AccountSkillMapper;
 import app.service.mapper.UserAccountMapper;
-import com.codahale.metrics.annotation.Timed;
-import app.service.UserAccountService;
 import app.web.rest.errors.BadRequestAlertException;
 import app.web.rest.util.HeaderUtil;
 import app.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -45,14 +44,10 @@ public class UserAccountResource {
 
     private final UserAccountMapper userAccountMapper;
 
-    private final UserAccountSkillService userAccountSkillService;
-
-
-    public UserAccountResource(UserAccountService userAccountService, AccountSkillMapper accountSkillMapper, UserAccountMapper userAccountMapper, UserAccountSkillService userAccountSkillService) {
+    public UserAccountResource(UserAccountService userAccountService, AccountSkillMapper accountSkillMapper, UserAccountMapper userAccountMapper) {
         this.userAccountService = userAccountService;
         this.accountSkillMapper = accountSkillMapper;
         this.userAccountMapper = userAccountMapper;
-        this.userAccountSkillService = userAccountSkillService;
     }
 
     /**

@@ -5,7 +5,6 @@ import app.AppApp;
 import app.domain.UserAccount;
 import app.repository.UserAccountRepository;
 import app.service.UserAccountService;
-import app.service.UserAccountSkillService;
 import app.service.mapper.AccountSkillMapper;
 import app.service.mapper.UserAccountMapper;
 import app.web.rest.errors.ExceptionTranslator;
@@ -78,14 +77,16 @@ public class UserAccountResourceIntTest {
 
     private MockMvc restUserAccountMockMvc;
 
+    @Autowired
     private UserAccount userAccount;
-    private UserAccountSkillService userAccountSkillService;
+
+    @Autowired
     private UserAccountMapper userAccountMapper;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final UserAccountResource userAccountResource = new UserAccountResource(userAccountService, accountSkillMapper, userAccountMapper, userAccountSkillService);
+        final UserAccountResource userAccountResource = new UserAccountResource(userAccountService, accountSkillMapper, userAccountMapper);
         this.restUserAccountMockMvc = MockMvcBuilders.standaloneSetup(userAccountResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
