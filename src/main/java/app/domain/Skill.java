@@ -25,7 +25,7 @@ public class Skill implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.skill", cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.skill")
     private Set<AccountSkill> accountSkills = new HashSet<AccountSkill>(0);
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

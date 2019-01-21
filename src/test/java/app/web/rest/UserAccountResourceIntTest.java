@@ -5,6 +5,9 @@ import app.AppApp;
 import app.domain.UserAccount;
 import app.repository.UserAccountRepository;
 import app.service.UserAccountService;
+import app.service.UserAccountSkillService;
+import app.service.mapper.AccountSkillMapper;
+import app.service.mapper.UserAccountMapper;
 import app.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -59,6 +62,9 @@ public class UserAccountResourceIntTest {
     private UserAccountService userAccountService;
 
     @Autowired
+    private AccountSkillMapper accountSkillMapper;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -73,11 +79,13 @@ public class UserAccountResourceIntTest {
     private MockMvc restUserAccountMockMvc;
 
     private UserAccount userAccount;
+    private UserAccountSkillService userAccountSkillService;
+    private UserAccountMapper userAccountMapper;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final UserAccountResource userAccountResource = new UserAccountResource(userAccountService);
+        final UserAccountResource userAccountResource = new UserAccountResource(userAccountService, accountSkillMapper, userAccountMapper, userAccountSkillService);
         this.restUserAccountMockMvc = MockMvcBuilders.standaloneSetup(userAccountResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

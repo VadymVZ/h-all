@@ -1,12 +1,11 @@
 package app.service;
 
+import app.domain.AccountSkill;
 import app.domain.User;
 import app.domain.UserAccount;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,7 +47,9 @@ public interface UserAccountService {
 
     UserAccount createUserAccount(User user);
 
+    Optional<UserAccount> addUserAccountSkill(AccountSkill accountSkill);
 
-    //TODO remove this test
-    void addUserAccountSkills(List<Long> ids);
+    void deleteUserAccountSkill(AccountSkill accountSkill);
+
+    Optional<UserAccount> getAccountWithAllSkills(Long accountId);
 }

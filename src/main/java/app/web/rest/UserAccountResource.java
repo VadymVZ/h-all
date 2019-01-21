@@ -1,7 +1,12 @@
 package app.web.rest;
 
+import app.domain.*;
+import app.service.UserAccountSkillService;
+import app.service.dto.AccountSkillDTO;
+import app.service.dto.UserAccountDTO;
+import app.service.mapper.AccountSkillMapper;
+import app.service.mapper.UserAccountMapper;
 import com.codahale.metrics.annotation.Timed;
-import app.domain.UserAccount;
 import app.service.UserAccountService;
 import app.web.rest.errors.BadRequestAlertException;
 import app.web.rest.util.HeaderUtil;
@@ -32,11 +37,22 @@ public class UserAccountResource {
     private final Logger log = LoggerFactory.getLogger(UserAccountResource.class);
 
     private static final String ENTITY_NAME = "userAccount";
+    private static final String ACCOUNT_SKILL_ENTITY_NAME = "accountSkill";
 
     private final UserAccountService userAccountService;
 
-    public UserAccountResource(UserAccountService userAccountService) {
+    private final AccountSkillMapper accountSkillMapper;
+
+    private final UserAccountMapper userAccountMapper;
+
+    private final UserAccountSkillService userAccountSkillService;
+
+
+    public UserAccountResource(UserAccountService userAccountService, AccountSkillMapper accountSkillMapper, UserAccountMapper userAccountMapper, UserAccountSkillService userAccountSkillService) {
         this.userAccountService = userAccountService;
+        this.accountSkillMapper = accountSkillMapper;
+        this.userAccountMapper = userAccountMapper;
+        this.userAccountSkillService = userAccountSkillService;
     }
 
     /**
@@ -123,4 +139,65 @@ public class UserAccountResource {
         userAccountService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+
+    /**
+     * POST  /user-accounts/skills : Add a new skill linkage to user account
+     *
+     * @param accountSkillDTO the user account skill to add
+     * @return the ResponseEntity with status 201 (Created) and with body the new UserAccountDTO, or with status 400 (Bad Request) if the UserAccountDTO has incorrect ids
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/user-accounts/skills")
+    @Timed
+    public ResponseEntity<UserAccountDTO> addUserAccountSkill(@RequestBody AccountSkillDTO accountSkillDTO) throws URISyntaxException {
+        log.debug("REST request to add AccountSkill : {}", accountSkillDTO);
+
+        if (accountSkillDTO.getAccountId() == null || accountSkillDTO.getSkillId() == null || accountSkillDTO.getSkillLevelId() == null) {
+            throw new BadRequestAlertException("Invalid account, skill or skillLevel id", ACCOUNT_SKILL_ENTITY_NAME, "idnull");
+        }
+
+        AccountSkill accountSkill = accountSkillMapper.toEntity(accountSkillDTO);
+        Optional<UserAccount> userAccount = userAccountService.addUserAccountSkill(accountSkill);
+        Optional<UserAccountDTO> userAccountDTO = userAccount.map(userAccountMapper::toDto);
+
+        return ResponseUtil.wrapOrNotFound(userAccountDTO);
+    }
+
+    /**
+     * DELETE  /user-accounts/skills : delete the accountSkillDTO.
+     *
+     * @param accountSkillDTO the account skill linkage to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/user-accounts/skills")
+    @Timed
+    public ResponseEntity<Void> deleteUserAccountSkill(@RequestBody AccountSkillDTO accountSkillDTO) {
+        log.debug("REST request to delete accountSkillDTO : {}", accountSkillDTO);
+        AccountSkill accountSkill = accountSkillMapper.toEntity(accountSkillDTO);
+        userAccountService.deleteUserAccountSkill(accountSkill);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ACCOUNT_SKILL_ENTITY_NAME, accountSkillDTO.toString())).build();
+    }
+
+
+    /**
+     * GET  /user-accounts/skills : get all the skills by account id.
+     *
+     * @param accountId the account id
+     * @return the ResponseEntity with status 200 (OK) and the list of account skills in body
+     */
+    @GetMapping("/user-accounts/skills")
+    @Timed
+    public ResponseEntity<UserAccountDTO> getAllUserAccounts(@RequestParam Long accountId) {
+        log.debug("REST request to get accountSkills by account id : {}", accountId);
+        if (accountId == null) {
+            throw new BadRequestAlertException("Invalid account id", ENTITY_NAME, "idnull");
+        }
+
+        Optional<UserAccount> account = userAccountService.getAccountWithAllSkills(accountId);
+        Optional<UserAccountDTO> userAccountDTO = account.map(userAccountMapper::toDto);
+
+        return ResponseUtil.wrapOrNotFound(userAccountDTO);
+    }
+
 }

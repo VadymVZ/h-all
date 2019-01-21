@@ -1,11 +1,13 @@
 package app.service.impl;
 
-import app.domain.*;
-import app.service.UserAccountService;
+import app.domain.AccountSkill;
+import app.domain.User;
+import app.domain.UserAccount;
 import app.repository.UserAccountRepository;
+import app.repository.UserAccountSkillRepository;
+import app.service.UserAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,8 +27,11 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userAccountRepository;
 
-    public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
+    private final UserAccountSkillRepository userAccountSkillRepository;
+
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository, UserAccountSkillRepository userAccountSkillRepository) {
         this.userAccountRepository = userAccountRepository;
+        this.userAccountSkillRepository = userAccountSkillRepository;
     }
 
 
@@ -38,7 +43,8 @@ public class UserAccountServiceImpl implements UserAccountService {
      */
     @Override
     public UserAccount save(UserAccount userAccount) {
-        log.debug("Request to save UserAccount : {}", userAccount);        return userAccountRepository.save(userAccount);
+        log.debug("Request to save UserAccount : {}", userAccount);
+        return userAccountRepository.save(userAccount);
     }
 
     /**
@@ -90,17 +96,27 @@ public class UserAccountServiceImpl implements UserAccountService {
         return userAccountRepository.save(userAccount);
     }
 
-    //TODO remove this test
-    public void addUserAccountSkills(List<Long> ids) {
+    @Override
+    public Optional<UserAccount> addUserAccountSkill(AccountSkill accountSkill) {
+        Optional<UserAccount> account = userAccountRepository.findById(accountSkill.getAccount().getId());
+        account.map(userAccount ->
+            userAccount.getAccountSkills().add(accountSkill));
 
-        UserAccount account = userAccountRepository.findById(1L).orElse(null);
-
-
-        AccountSkill accountSkill1 = new AccountSkill();
-        accountSkill1.setAccount(new UserAccount());
-        accountSkill1.setSkill(new Skill());
-        accountSkill1.setSkillLevel(new SkillLevel());
-        account.getAccountSkills().add(accountSkill1);
-
+        return account;
     }
+
+    @Override
+    public void deleteUserAccountSkill(AccountSkill accountSkill) {
+        log.debug("Request to delete AccountSkill : {}", accountSkill);
+        userAccountSkillRepository.deleteByPkAccountIdAndPkSkillId(
+            accountSkill.getAccount().getId(), accountSkill.getSkill().getId());
+    }
+
+    @Override
+    public Optional<UserAccount> getAccountWithAllSkills(Long accountId) {
+        log.debug("Request to get AccountSkills by account id : {}", accountId);
+        return userAccountRepository.getWithSkills(accountId);
+    }
+
+
 }

@@ -11,9 +11,7 @@ import java.io.Serializable;
 })
 public class AccountSkill implements Serializable {
 
-
-    private static final long serialVersionUID = -5408088821821463210L;
-    private SkillAccountId pk = new SkillAccountId();
+    private AccountSkillId pk = new AccountSkillId();
     private SkillLevel skillLevel;
 
     public AccountSkill() {
@@ -24,11 +22,11 @@ public class AccountSkill implements Serializable {
     }
 
     @EmbeddedId
-    public SkillAccountId getPk() {
+    public AccountSkillId getPk() {
         return pk;
     }
 
-    public void setPk(SkillAccountId pk) {
+    public void setPk(AccountSkillId pk) {
         this.pk = pk;
     }
 
@@ -43,15 +41,15 @@ public class AccountSkill implements Serializable {
     }
 
     @Transient
-    public Account getAccount(){
+    public UserAccount getAccount(){
         return getPk().getAccount();
     }
 
-    public void setAccount(Account account){
+    public void setAccount(UserAccount account){
         getPk().setAccount(account);
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "skill_level_id", nullable = false)
     public SkillLevel getSkillLevel() {
         return skillLevel;

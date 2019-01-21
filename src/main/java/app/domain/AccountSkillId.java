@@ -1,17 +1,15 @@
 package app.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Embeddable
-public class SkillAccountId implements Serializable {
+public class AccountSkillId implements Serializable {
 
     private static final long serialVersionUID = -7320448872869136400L;
 
     private Skill skill;
-    private Account account;
+    private UserAccount account;
 
     @ManyToOne
     public Skill getSkill() {
@@ -23,11 +21,11 @@ public class SkillAccountId implements Serializable {
     }
 
     @ManyToOne
-    public Account getAccount() {
+    public UserAccount getAccount() {
         return account;
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(UserAccount account) {
         this.account = account;
     }
 
@@ -35,7 +33,7 @@ public class SkillAccountId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SkillAccountId that = (SkillAccountId) o;
+        AccountSkillId that = (AccountSkillId) o;
 
         if (skill != null ? !skill.equals(that.skill) : that.skill != null) return false;
         if (account != null ? !account.equals(that.account) : that.account != null)

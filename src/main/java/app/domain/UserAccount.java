@@ -36,7 +36,7 @@ public class UserAccount implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.account")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.account", cascade = CascadeType.ALL)
     private Set<AccountSkill> accountSkills = new HashSet<AccountSkill>(0);
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "account")
